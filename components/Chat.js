@@ -18,7 +18,7 @@ export default class Chat extends React.Component {
             headerTintColor: '#fff',
             headerTitleStyle: {
                 fontSize: 20,
-                fontWeight: 600,
+                fontWeight: '600',
             },
         };
     };

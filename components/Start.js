@@ -40,7 +40,7 @@ export default class Start extends React.Component {
                             style={{ height: 25, width: 25 }}
                             source={require('../assets/icon.svg')} />
                         <TextInput
-                            style={[styles.text, { paddingLeft: 15, opacity: '50%', }]}
+                            style={[styles.text, { paddingLeft: 15, opacity: 0.5, }]}
                             onChangeText={(name) => this.setState({ name })}
                             value={this.state.name}
                             placeholder='Your Name' />
@@ -48,7 +48,6 @@ export default class Start extends React.Component {
                     <Text style={[styles.text, { margin: '5%' }]}>Choose Background Color:</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: '-8%', }}>
                         <TouchableOpacity
-                            activeOpacity='0.6'
                             style={[styles.circle, { backgroundColor: '#090C08' }]}
                             onPress={() => this.setState({ color: '#090C08' })}>
                             <Text style={styles.tick}>
@@ -56,7 +55,6 @@ export default class Start extends React.Component {
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            activeOpacity='0.6'
                             style={[styles.circle, { backgroundColor: '#474056' }]}
                             onPress={() => this.setState({ color: '#474056' })}>
                             <Text style={styles.tick}>
@@ -64,7 +62,6 @@ export default class Start extends React.Component {
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            activeOpacity='0.6'
                             style={[styles.circle, { backgroundColor: '#8A95A5' }]}
                             onPress={() => this.setState({ color: '#8A95A5' })}>
                             <Text style={styles.tick}>
@@ -72,7 +69,6 @@ export default class Start extends React.Component {
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            activeOpacity='0.6'
                             style={[styles.circle, { backgroundColor: '#B9C6AE' }]}
                             onPress={() => this.setState({ color: '#B9C6AE' })}>
                             <Text style={styles.tick}>
@@ -81,7 +77,6 @@ export default class Start extends React.Component {
                         </TouchableOpacity>
                     </View>
                     <TouchableOpacity
-                        activeOpacity='0.8'
                         style={[styles.button, { marginTop: '2%' }]}
                         onPress={this.onPress}
                     >
@@ -122,19 +117,19 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 45,
-        fontWeight: 600,
+        fontWeight: '600',
         alignSelf: 'center',
         color: '#fff',
     },
     text: {
-        fontColor: '#757083',
+        color: '#757083',
         fontSize: 16,
-        fontWeight: 300,
+        fontWeight: '300',
     },
     textInput: {
         flexDirection: 'row',
-        borderWidth: '1.5px',
-        borderRadius: '2px',
+        borderWidth: 1.5,
+        borderRadius: 2,
         borderColor: '#757083',
         height: 60,
         padding: 15,
