@@ -30,7 +30,7 @@ export default class Start extends React.Component {
         return (
             <ImageBackground
                 source={require('../assets/background.png')}
-                style={{ flex: 1 }}>
+                style={{ flex: 1, justifyContent: 'space-between' }}>
                 <Text style={[styles.title, { marginTop: '15%' }]}>
                     ChatNow
                 </Text>
@@ -40,13 +40,13 @@ export default class Start extends React.Component {
                             style={{ height: 25, width: 25 }}
                             source={require('../assets/icon.svg')} />
                         <TextInput
-                            style={[styles.text, { paddingLeft: 15, opacity: 0.5, }]}
+                            style={[styles.text, { paddingLeft: 15, opacity: 0.8 }]}
                             onChangeText={(name) => this.setState({ name })}
                             value={this.state.name}
                             placeholder='Your Name' />
                     </View>
                     <Text style={[styles.text, { margin: '5%' }]}>Choose Background Color:</Text>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: '-8%', }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: '-5%', }}>
                         <TouchableOpacity
                             style={[styles.circle, { backgroundColor: '#090C08' }]}
                             onPress={() => this.setState({ color: '#090C08' })}>
@@ -77,7 +77,7 @@ export default class Start extends React.Component {
                         </TouchableOpacity>
                     </View>
                     <TouchableOpacity
-                        style={[styles.button, { marginTop: '2%' }]}
+                        style={styles.button}
                         onPress={this.onPress}
                     >
                         <Text style={[styles.title, { fontSize: 16 }]}>START CHATTING</Text>
@@ -102,10 +102,11 @@ const styles = StyleSheet.create({
         marginTop: 15,
     },
     container: {
+        alignContent: 'flex-end',
         height: '44%',
         width: '88%',
-        padding: '5.28%',
-        marginTop: '56%',
+        padding: '5%',
+        marginBottom: '3%',
         alignSelf: 'center',
         alignItems: 'stretch',
         backgroundColor: '#fff',
