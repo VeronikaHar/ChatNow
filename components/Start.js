@@ -48,6 +48,10 @@ export default class Start extends React.Component {
                     <Text style={[styles.text, { margin: '5%' }]}>Choose Background Color:</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: '-5%', }}>
                         <TouchableOpacity
+                            accessible={true}
+                            accessibilityLabel="Chat background color"
+                            accessibilityHint="Lets you choose your chat background color."
+                            accessibilityRole="button"
                             style={[styles.circle, { backgroundColor: '#090C08' }]}
                             onPress={() => this.setState({ color: '#090C08' })}>
                             <Text style={styles.tick}>
@@ -55,6 +59,10 @@ export default class Start extends React.Component {
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
+                            accessible={true}
+                            accessibilityLabel="Chat background color"
+                            accessibilityHint="Lets you choose your chat background color."
+                            accessibilityRole="button"
                             style={[styles.circle, { backgroundColor: '#474056' }]}
                             onPress={() => this.setState({ color: '#474056' })}>
                             <Text style={styles.tick}>
@@ -62,6 +70,10 @@ export default class Start extends React.Component {
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
+                            accessible={true}
+                            accessibilityLabel="Chat background color"
+                            accessibilityHint="Lets you choose your chat background color."
+                            accessibilityRole="button"
                             style={[styles.circle, { backgroundColor: '#8A95A5' }]}
                             onPress={() => this.setState({ color: '#8A95A5' })}>
                             <Text style={styles.tick}>
@@ -69,6 +81,10 @@ export default class Start extends React.Component {
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
+                            accessible={true}
+                            accessibilityLabel="Chat background color"
+                            accessibilityHint="Lets you choose your chat background color."
+                            accessibilityRole="button"
                             style={[styles.circle, { backgroundColor: '#B9C6AE' }]}
                             onPress={() => this.setState({ color: '#B9C6AE' })}>
                             <Text style={styles.tick}>
@@ -77,6 +93,10 @@ export default class Start extends React.Component {
                         </TouchableOpacity>
                     </View>
                     <TouchableOpacity
+                        accessible={true}
+                        accessibilityLabel="Chat start"
+                        accessibilityHint="Transfers you to the chat screen."
+                        accessibilityRole="button"
                         style={styles.button}
                         onPress={this.onPress}
                     >
