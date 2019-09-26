@@ -1,8 +1,11 @@
 import React from 'react';
 
 //import elements needed for the Start page UI
-import { Image, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Image, ImageBackground, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+
+// library for Android devices to keep input field above the keyboard
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 // the application’s start page component that allows user to enter his name and pick his chat background 
 export default class Start extends React.Component {
@@ -22,7 +25,7 @@ export default class Start extends React.Component {
     //function that styles the header bar
     static navigationOptions = {
         headerStyle: {
-            backgroundColor: '#868096'
+            backgroundColor: '#757083'
         },
     };
 
@@ -31,7 +34,7 @@ export default class Start extends React.Component {
             <ImageBackground
                 source={require('../assets/background.png')}
                 style={{ flex: 1, justifyContent: 'space-between' }}>
-                <Text style={[styles.title, { marginTop: '15%' }]}>
+                <Text style={[styles.title, { marginTop: '15%', marginBottom: '42%', }]}>
                     ChatNow
                 </Text>
                 <View style={styles.container}>
@@ -103,6 +106,7 @@ export default class Start extends React.Component {
                         <Text style={[styles.title, { fontSize: 16 }]}>START CHATTING</Text>
                     </TouchableOpacity>
                 </View>
+                {Platform.OS === 'android' ? <KeyboardSpacer /> : null}
             </ImageBackground>
         )
     }
@@ -126,7 +130,6 @@ const styles = StyleSheet.create({
         height: '44%',
         width: '88%',
         padding: '5%',
-        marginBottom: '3%',
         alignSelf: 'center',
         alignItems: 'stretch',
         backgroundColor: '#fff',
