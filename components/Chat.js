@@ -59,7 +59,7 @@ export default class Chat extends React.Component {
     }
 
     //save a message object to the Firebase
-    async addMessage() {
+    addMessage = async () => {
         const message = this.state.messages[0];
 
         // add a new message to the Firebase collection
@@ -79,7 +79,7 @@ export default class Chat extends React.Component {
     }
 
     //save messages into asyncStorage 
-    async saveMessages() {
+    saveMessages = async () => {
         try {
             await AsyncStorage.setItem('messages', JSON.stringify(this.state.messages));
         }
@@ -89,7 +89,7 @@ export default class Chat extends React.Component {
     }
 
     //load the messages from asyncStorage
-    async getMessages() {
+    getMessages = async () => {
         let messages = '';
         try {
             messages = await AsyncStorage.getItem('messages') || [];
@@ -118,7 +118,7 @@ export default class Chat extends React.Component {
         // go through each document
         querySnapshot.forEach((doc) => {
             // get the QueryDocumentSnapshot's data
-            var data = doc.data();
+            let data = doc.data();
             messages.push({
                 _id: data._id,
                 text: data.text || '',
@@ -236,7 +236,7 @@ export default class Chat extends React.Component {
 
                     systemMessages.push({
                         _id: 1,
-                        text: this.props.navigation.state.params.name + ' joined the chat',
+                        text: `${this.props.navigation.state.params.name} joined the chat`,
                         createdAt: new Date(),
                         system: true,
                     });
@@ -245,7 +245,7 @@ export default class Chat extends React.Component {
                     this.setState({
                         systemMessages,
                         uid: user.uid,
-                        loggedInText: 'Hello there, ' + this.props.navigation.state.params.name,
+                        loggedInText: `Hello there, ${this.props.navigation.state.params.name}!`,
                         isConnected: true,
                     });
 
@@ -255,13 +255,11 @@ export default class Chat extends React.Component {
             } else {
                 this.setState({
                     isConnected: false,
-                    loggedInText: 'You are offline and cannot send messages'
+                    loggedInText: 'You are offline and cannot send messages.'
                 });
                 this.getMessages();
             }
         });
-
-
     }
 
     componentWillUnmount() {

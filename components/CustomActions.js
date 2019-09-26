@@ -27,13 +27,10 @@ export default class CustomActions extends React.Component {
             async (buttonIndex) => {
                 switch (buttonIndex) {
                     case 0:
-                        console.log('user wants to pick an image');
                         return this.pickImage();
                     case 1:
-                        console.log('user wants to take a photo');
                         return this.takePhoto();
                     case 2:
-                        console.log('user wants to get their location');
                         return this.getLocation();
                 }
             },
@@ -43,8 +40,8 @@ export default class CustomActions extends React.Component {
     //allow to pick an image from user's gallery 
     pickImage = async () => {
         try {
-            const gallery = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-            if (gallery.status === 'granted') {
+            const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+            if (status === 'granted') {
                 let result = await ImagePicker.launchImageLibraryAsync({ mediaTypes: 'Images', }).catch(error => console.log(error));
 
                 if (!result.cancelled) {
@@ -78,8 +75,8 @@ export default class CustomActions extends React.Component {
     //allow to share user's current location 
     getLocation = async () => {
         try {
-            const location = await Permissions.askAsync(Permissions.LOCATION);
-            if (location.status === 'granted') {
+            const { status } = await Permissions.askAsync(Permissions.LOCATION);
+            if (status === 'granted') {
                 let result = await Location.getCurrentPositionAsync({});
                 if (result) {
                     this.props.onSend({
@@ -108,8 +105,8 @@ export default class CustomActions extends React.Component {
                 imageName = splitURI[splitURI.length - 1];
 
             // create a reference to the Cloud storage location and puts the blob data in it
-            const imagesRef = firebase.storage().ref().child('images'),
-                fileRef = imagesRef.child(imageName), snapshot = await fileRef.put(blob);
+            const fileRef = firebase.storage().ref().child(`images/${imageName}`),
+                snapshot = await fileRef.put(blob);
 
             //get the image URL from storage
             const imageURL = await snapshot.ref.getDownloadURL();
