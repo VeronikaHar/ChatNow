@@ -38,7 +38,7 @@ export default class Start extends React.Component {
                     <View style={styles.textInput}>
                         <Image
                             style={{ height: 25, width: 25 }}
-                            source={require('../assets/icon.svg')} />
+                            source={require('../assets/icon.png')} />
                         <TextInput
                             style={[styles.text, { paddingLeft: 15, opacity: 0.8 }]}
                             onChangeText={(name) => this.setState({ name })}
