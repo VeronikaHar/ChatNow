@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 import React from 'react';
 import {
   AsyncStorage, NetInfo, Platform, Text, View,
@@ -15,7 +14,7 @@ import MapView from 'react-native-maps';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 
-// import specitake photo, share an image or location
+// import special actions like take photo, share an image or location
 import CustomActions from './CustomActions';
 
 // the application’s Chat component that renders the chat UI
@@ -119,10 +118,10 @@ export default class Chat extends React.Component {
     this.setState((previousState) => ({
       messages: GiftedChat.append(previousState.messages, messages),
     }),
-    () => {
-      this.saveMessages();
-      this.addMessage();
-    });
+      () => {
+        this.saveMessages();
+        this.addMessage();
+      });
   }
 
   // save a message object to the Firebase
@@ -148,6 +147,7 @@ export default class Chat extends React.Component {
   saveMessages = async () => {
     try {
       await AsyncStorage.setItem('messages', JSON.stringify(this.state.messages));
+      await AsyncStorage.setItem('username', JSON.stringify(this.props.navigation.state.params.name));
     } catch (error) {
       console.log(error.message);
     }
@@ -187,6 +187,15 @@ export default class Chat extends React.Component {
         messages,
       });
     });
+  }
+
+  // set 'user' for GiftedChat props
+  get user() {
+    return {
+      _id: this.state.uid,
+      name: this.props.navigation.state.params.name,
+      avatar: ''
+    };
   }
 
   // set bubble styling
