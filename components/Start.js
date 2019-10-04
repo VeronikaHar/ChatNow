@@ -1,16 +1,21 @@
+/**
+ * @fileOverview Creates a start page where the user can type his name and pick chat background color
+ */
 import React from 'react';
-
-// import elements needed for the Start page UI
 import {
   AsyncStorage, Image, ImageBackground, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View,
 } from 'react-native';
-
 import { Ionicons } from '@expo/vector-icons';
-
-// library for Android devices to keep input field above the keyboard
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 
-// the app’s start page component that allows user to enter his name and pick his chat background
+/**
+* @class Start 
+* @requires React
+* @requires React-Native
+* @requires Ionicons - expo library of special symbols
+* @requires KeyboardSpacer - library for Android devices to keep input field above the keyboard
+*/
+
 export default class Start extends React.Component {
   constructor(props) {
     super(props);
@@ -21,14 +26,25 @@ export default class Start extends React.Component {
   }
 
   componentDidMount() {
+    /** Sets username value to this.state.name for exisiting user */
     this.getUsername();
   }
 
-  // get username from AsyncStorage for existing users
+  /** 
+   *  Loads the existing user's username from the AsyncStorage and passes it to the state.
+   * 
+   * @async
+   * @function getUsername
+   * @return {Promise<string>} the username
+   */
   getUsername = async () => {
     let username = '';
     try {
+      /**
+       * @default ''
+       */
       username = await AsyncStorage.getItem('username') || '';
+      /** @constant */
       const name = JSON.parse(username)
       this.setState({ name });
     } catch (error) {
@@ -36,12 +52,12 @@ export default class Start extends React.Component {
     }
   }
 
-  // navigates to the Chat screen with the params of the user's name and selected background color
+  /** navigates to the Chat screen with the params of the user's name and selected background color */
   onPress = () => {
     this.props.navigation.navigate('Chat', { name: this.state.name, color: this.state.color });
   }
 
-  // function that styles the header bar
+  /** Styles the header bar */
   static navigationOptions = {
     headerStyle: {
       backgroundColor: '#757083',
@@ -49,6 +65,15 @@ export default class Start extends React.Component {
   };
 
   render() {
+    /**
+     * @function render
+     * @memberof Start - react class component
+     * @returns ImageBackground
+     * @returns App Title
+     * @returns TextInput
+     * @returns TouchableOpacity with background color options
+     * @returns KeyboardSpacer if user's OS is Android
+     */
     return (
       <ImageBackground
         source={require('../assets/background.png')}

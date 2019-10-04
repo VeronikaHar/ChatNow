@@ -1,25 +1,38 @@
+
+/**
+ * @fileOverview Creates chat room interface and functionality
+ */
 import React from 'react';
 import {
   AsyncStorage, NetInfo, Platform, Text, View,
 } from 'react-native';
-
-// library for Android devices to keep input field above the keyboard
-import KeyboardSpacer from 'react-native-keyboard-spacer';
-
-// library with chat UI
-import { Bubble, GiftedChat, InputToolbar } from 'react-native-gifted-chat';
-import MapView from 'react-native-maps';
-
-// import Firebase to create a new Firestore database to store the chat's messages
 import * as firebase from 'firebase';
 import 'firebase/firestore';
-
-// import special actions like take photo, share an image or location
+import KeyboardSpacer from 'react-native-keyboard-spacer';
+import { Bubble, GiftedChat, InputToolbar } from 'react-native-gifted-chat';
+import MapView from 'react-native-maps';
 import CustomActions from './CustomActions';
 
-// the application’s Chat component that renders the chat UI
+/**
+* @class Chat
+* @requires React
+* @requires React-Native
+* @requires Firebase
+* @requires Firestore
+* @requires KeyboardSpacer - library for Android devices to keep input field above the keyboard
+* @requires CustomActions - take photo, share an image or location
+* @requires React-Native-Maps
+* @requires React-Native-Gifted-Chat - library with Chat UI
+*/
+
 export default class Chat extends React.Component {
-  // style the header bar and set the the user’s name as the title
+  /**
+     * Styles the header bar and set the the user’s name as the title.
+     * 
+     * @function navigationOptions
+     * @param { Object } navigation
+     * @returns { Object }
+     * */
   static navigationOptions({ navigation }) {
     return {
       title: navigation.state.params.name,
@@ -38,7 +51,7 @@ export default class Chat extends React.Component {
   constructor(props) {
     super(props);
 
-    // initialize Firebase with its configuration
+    /** Initializes Firebase with its configuration */
     if (!firebase.apps.length) {
       firebase.initializeApp({
         apiKey: 'AIzaSyD-NZrmpfQSKL1DwPfgjAJXXpmd9DQA4Qs',
@@ -51,10 +64,10 @@ export default class Chat extends React.Component {
       });
     }
 
-    // reference created database in the Firestore
+    /** References the created database in the Firestore */
     this.referenceMessages = firebase.firestore().collection('messages');
 
-    // initialize state
+    /** initializes state */
     this.state = {
       systemMessages: [],
       messages: [],
@@ -65,15 +78,22 @@ export default class Chat extends React.Component {
   }
 
   componentDidMount() {
-    // if online, fetch messages from Firestore, otherwise from asyncStorage
+    /** if online, fetches messages from Firestore, otherwise from asyncStorage*/
     NetInfo.isConnected.fetch().then((isConnected) => {
       if (isConnected) {
-        // check whether the user is signed in and if not authorize a new user
+        /**
+         * Checks whether the user is signed in and if not authorize a new user.
+         * 
+         * @function navigationOptions
+         * @param { Object } user
+         * @returns { Object }
+         */
         this.authUnsubscribe = firebase.auth().onAuthStateChanged((user) => {
           if (!user) {
             firebase.auth().signInAnonymously();
           }
 
+          /** @constant - informs that the user joined the chatroom */
           const systemMessages = [];
 
           systemMessages.push({
@@ -83,7 +103,7 @@ export default class Chat extends React.Component {
             system: true,
           });
 
-          // update the state with currently active user data
+          /** Updates the state with currently active user data */
           this.setState({
             systemMessages,
             uid: user.uid,
@@ -91,7 +111,7 @@ export default class Chat extends React.Component {
             isConnected: true,
           });
 
-          // listen for collection changes for chat room
+          /** Listens for collection changes for chat room */
           this.unsubscribe = this.referenceMessages.orderBy('createdAt', 'desc').onSnapshot(this.onCollectionUpdate);
         });
       } else {
@@ -106,14 +126,20 @@ export default class Chat extends React.Component {
 
   componentWillUnmount() {
     if (this.state.isConnected) {
-      // stop listening to authentication
+      /** stops listening to authentication */
       this.authUnsubscribe();
-      // stop listening for changes
+      /** stops listening for chat room changes */
       this.unsubscribe();
     }
   }
 
-  // append new messages to the ones saved in the state, Firebase and asyncStorage
+  /** 
+   * Appends new messages to the ones saved in the state, Firebase and asyncStorage.
+   * @function onSend
+   * @param {Array} messages 
+   * @default []
+   * @returns {Array} array of all the messages in the chat.
+   */
   onSend(messages = []) {
     this.setState((previousState) => ({
       messages: GiftedChat.append(previousState.messages, messages),
@@ -124,18 +150,32 @@ export default class Chat extends React.Component {
       });
   }
 
-  // save a message object to the Firebase
+  /** 
+   *  Adds a new message to the Firebase.
+   * 
+   * @async
+   * @function addMessage
+   * @return {Promise<Object>} the new message object. 
+   */
   addMessage = async () => {
+    /** @constant */
     const message = this.state.messages[0];
-
-    // add a new message to the Firebase collection
     try {
       await this.referenceMessages.add({
         _id: message._id,
+        /**
+         * @default ''
+         */
         text: message.text || '',
         createdAt: message.createdAt.toString(),
         user: message.user,
+        /**
+        * @default null
+        */
         image: message.image || null,
+        /**
+         * @default null
+         */
         location: message.location || null,
       });
     } catch (error) {
@@ -143,7 +183,13 @@ export default class Chat extends React.Component {
     }
   }
 
-  // save messages into asyncStorage
+  /** 
+   *  Saves all messages and username into the AsyncStorage.
+   * 
+   * @async
+   * @function saveMessages
+   * @return {Promise<string>}  The data from the storage.
+   */
   saveMessages = async () => {
     try {
       await AsyncStorage.setItem('messages', JSON.stringify(this.state.messages));
@@ -153,10 +199,19 @@ export default class Chat extends React.Component {
     }
   }
 
-  // load the messages from asyncStorage
+  /** 
+   *  Loads the messages from the AsyncStorage.
+   * 
+   * @async
+   * @function getMessages
+   * @return {Promise<string>}  all the messages from the Async storage
+   */
   getMessages = async () => {
     let messages = '';
     try {
+      /**
+       * @default empty array
+       */
       messages = await AsyncStorage.getItem('messages') || [];
       this.setState({
         messages: JSON.parse(messages),
@@ -166,21 +221,36 @@ export default class Chat extends React.Component {
     }
   }
 
-  // writes chat messages to state messages whenever the collection changes
+  /** 
+   *  Writes chat messages to state messages whenever the collection changes.
+   * 
+   * @function onCollectionUpdate
+   * @param {Array} querySnapshot - array of chat messages
+   * @return {Array}  updated array of messages in the state
+   */
   onCollectionUpdate = (querySnapshot) => {
+    /** @constant */
     const messages = [];
     messages.push(this.state.systemMessages[0]);
 
-    // go through each document
     querySnapshot.forEach((doc) => {
-      // get the QueryDocumentSnapshot's data
+      /**@constant data - the QueryDocumentSnapshot's data */
       const data = doc.data();
       messages.push({
         _id: data._id,
+        /**
+         * @default ''
+         */
         text: data.text || '',
         createdAt: data.createdAt.toString(),
         user: data.user,
+        /**
+         * @default null
+         */
         image: data.image || null,
+        /**
+         * @default null
+         */
         location: data.location || null,
       });
       this.setState({
@@ -189,7 +259,12 @@ export default class Chat extends React.Component {
     });
   }
 
-  // set 'user' for GiftedChat props
+  /**
+   * Gets the user props for GiftedChat.
+   * 
+   * @function user
+   * @returns {Object} - user object with id, name and avatar props 
+   */
   get user() {
     return {
       _id: this.state.uid,
@@ -198,7 +273,13 @@ export default class Chat extends React.Component {
     };
   }
 
-  // set bubble styling
+  /** 
+   * Defines the chat bubbles styling.
+   * 
+   * @function renderBubble
+   * @param props 
+   * @returns {class} Bubble
+   */
   renderBubble(props) {
     return (
       <Bubble
@@ -220,7 +301,13 @@ export default class Chat extends React.Component {
     );
   }
 
-  // only render the InputToolbar when the user is online
+  /**
+   * Renders the InputToolbar only when the user is online.
+   * 
+   * @function renderInputToolbar
+   * @param props
+   * @returns {class} InputToolbar
+   */
   renderInputToolbar(props) {
     if (this.state.isConnected === true) {
       return (
@@ -229,11 +316,25 @@ export default class Chat extends React.Component {
     }
   }
 
-  // render custom actions from the imported file
+  /**
+   * Renders custom actions.
+   * 
+   * @function renderCustomActions
+   * @param props
+   * @returns {class} CustomActions
+   */
   renderCustomActions = (props) => <CustomActions {...props} />;
 
   // renders MapView if the currentMessage contains location data
+  /**
+   * Renders MapView if the current message contains location data.
+   * 
+   * @function renderCustomView
+   * @param props
+   * @returns {class} MapView
+   */
   renderCustomView(props) {
+    /** @constant */
     const { currentMessage } = props;
     if (currentMessage.location) {
       return (
@@ -257,11 +358,18 @@ export default class Chat extends React.Component {
   }
 
   render() {
+    /**
+     * @function render
+     * @memberof Chat - react class component
+     * @returns Offline/Online status text
+     * @returns Gifted chat with its UI
+     * @returns KeyboardSpacer if user's OS is Android
+     */
     return (
-      // set the background color to the one passed in the params
       <View
         style={{
           flex: 1,
+          /** sets the background color to the one passed in the params*/
           backgroundColor: this.props.navigation.state.params.color,
         }}
       >
