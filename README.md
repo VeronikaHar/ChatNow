@@ -52,13 +52,14 @@ The following npm packages and libraries have been used:
  |react-native-keyboard-spacer| library used to correct the position of the keyboard in Android devices
  |[react-native-web](https://github.com/necolas/react-native-web)| library to run React Native components and APIs on the web using React DOM
  |[react-navigation](https://reactnavigation.org/en/)| library with routing and navigation functionality for React Native apps
-# Note
 
-To install, run in the project's directory:
+To install a certain package, run in the project's directory:
 ```sh
 $ npm install -s [package name]
-or
-$ npm install -s [for installing all dependencies]
+```
+or for installing all dependencies at once:
+```sh
+$ npm install -s 
 ```
 
 ### Setup
